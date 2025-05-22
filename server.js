@@ -14,11 +14,38 @@ const cartRoutes = require('./routes/cartRoutes');
 const adminRoutes = require('./routes/adminRoutes'); 
 const trainerRoutes = require('./routes/trainerRoutes');  // Import trainer routes
 const { authenticateToken } = require('./Middleware/authMiddleware'); 
+const threadRoutes = require('./routes/threadRoutes');
+const workoutRoutes = require('./routes/workoutRoutes');
+const app = express();
 require('dotenv').config();
 
 dotenv.config();
 
-const app = express();
+const corsOptions = {
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true,
+  maxAge: 86400 // 24 hours
+};
+
+// Apply CORS middleware
+app.use(cors(corsOptions));
+
+// Handle CORS preflight requests
+app.options('*', cors(corsOptions));
+
+// Error handling for CORS
+app.use((err, req, res, next) => {
+  if (err.name === 'CORSError') {
+    return res.status(403).json({
+      error: 'CORS error',
+      message: 'Not allowed by CORS'
+    });
+  }
+  next(err);
+});
+
 app.use('/api/orders', orderRoutes);
 app.use(cors({
   origin: 'http://localhost:3000', // your frontend origin
@@ -47,6 +74,9 @@ app.use('/api', productRoutes);
 app.use('/api', userRoutes);       
 app.use('/api/admin', adminRoutes);
 
+app.use('/api/workouts', workoutRoutes);
+
+app.use('/api/threads', threadRoutes);
 
 // New Trainer Routes
 app.use('/api/trainers', trainerRoutes);  // Mount the trainer routes here

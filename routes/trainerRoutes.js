@@ -3,9 +3,14 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const Trainer = require('../models/Trainer');
+const { hireTrainer } = require('../controllers/hireTrainerController');
 const { authenticateToken } = require('../Middleware/authMiddleware');
 const verifyTrainerOwner = require('../Middleware/verifyTrainerOwner');
 
+exports.hireTrainer = async (req, res) => {
+  console.log('✅ hireTrainer route hit');
+  // rest of the code
+};
 // Configure multer for image upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -17,6 +22,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+
+router.post('/hire', hireTrainer);
+
 // POST route to handle trainer registration
 router.post('/register', upload.single('image'), async (req, res) => {
   const {
@@ -27,10 +35,20 @@ router.post('/register', upload.single('image'), async (req, res) => {
     availability,
     description,
     gmail, // ✅ Extract gmail
+    onlineClassLink,
+    gymLocation,
     availableSlots,
     token
   } = req.body;
   const image = req.file ? req.file.path : null;
+
+  // ✅ Validation based on availability
+  if (availability === 'online' && !onlineClassLink) {
+    return res.status(400).json({ message: 'Online class link is required for online availability' });
+  }
+  if (availability === 'physical' && !gymLocation) {
+    return res.status(400).json({ message: 'Gym location is required for physical availability' });
+  }
 
   try {
     let parsedSlots = [];
@@ -50,6 +68,8 @@ router.post('/register', upload.single('image'), async (req, res) => {
       availability,
       description,
       gmail, // ✅ Save gmail
+      onlineClassLink,
+      gymLocation,
       availableSlots: parsedSlots, // ✅ Save slots array
       image
     });
@@ -83,7 +103,7 @@ router.get('/female', async (req, res) => {
 });
 
 router.get('/my-trainer', authenticateToken, async (req, res) => {
-  onsole.log('Decoded JWT user:', req.user);
+  console.log('Decoded JWT user:', req.user);
   const loggedInEmail = req.user.email;
 
   try {
@@ -120,6 +140,21 @@ router.put(
         }
       }
 
+      // ✅ Validation based on updated availability
+      if (updateData.availability === 'online') {
+        if (!updateData.onlineClassLink) {
+          return res.status(400).json({ message: 'Online class link is required for online availability' });
+        }
+        updateData.gymLocation = undefined;
+      }
+
+      if (updateData.availability === 'physical') {
+        if (!updateData.gymLocation) {
+          return res.status(400).json({ message: 'Gym location is required for physical availability' });
+        }
+        updateData.onlineClassLink = undefined;
+      }
+
       if (updateData.availableSlots) {
         try {
           updateData.availableSlots = JSON.parse(updateData.availableSlots);
@@ -151,5 +186,16 @@ router.delete('/delete-trainer/:id', authenticateToken, verifyTrainerOwner, asyn
     res.status(500).json({ message: 'Error deleting trainer', error });
   }
 });
+// ✅ Get a specific trainer by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const trainer = await Trainer.findById(req.params.id);
+    if (!trainer) return res.status(404).json({ message: 'Trainer not found' });
+    res.status(200).json(trainer);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching trainer by ID', error });
+  }
+});
+
 
 module.exports = router;
