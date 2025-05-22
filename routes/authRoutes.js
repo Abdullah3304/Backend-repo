@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Cart = require('../models/cart');
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 const crypto = require('crypto');
 const sendEmail = require('../utils/sendEmail');
 
@@ -152,7 +152,7 @@ router.post('/login', async (req, res) => {
     };
 
     // Sign the JWT token (expires in 1 hour)
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
 
     // Respond with the JWT token
     res.json({ token });

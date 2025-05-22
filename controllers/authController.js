@@ -5,7 +5,7 @@ const User = require('../models/User');
 const Cart = require('../models/cart');
 const { authenticateToken, verifyAdmin } = require('../Middleware/authMiddleware'); 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 router.post('/register', async (req, res) => {
   const { email, password } = req.body;
@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
         isAdmin: user.isAdmin,
       };
 
-      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
 
       res.json({ token });
     });

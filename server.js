@@ -79,7 +79,7 @@ app.use('/api/workouts', workoutRoutes);
 app.use('/api/threads', threadRoutes);
 
 // New Trainer Routes
-app.use('/api/trainers', trainerRoutes);  // Mount the trainer routes here
+app.use('/api/trainers', authenticateToken, trainerRoutes);  // Mount the trainer routes here
 
 app.post('/upload', upload.single('image'), (req, res) => {
   if (!req.file) {

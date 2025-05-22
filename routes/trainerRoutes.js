@@ -5,7 +5,7 @@ const path = require('path');
 const Trainer = require('../models/Trainer');
 const { hireTrainer } = require('../controllers/hireTrainerController');
 const { authenticateToken } = require('../Middleware/authMiddleware');
-const verifyTrainerOwner = require('../Middleware/verifyTrainerOwner');
+// const verifyTrainerOwner = require('../Middleware/verifyTrainerOwner');
 
 exports.hireTrainer = async (req, res) => {
   console.log('✅ hireTrainer route hit');
@@ -38,7 +38,6 @@ router.post('/register', upload.single('image'), async (req, res) => {
     onlineClassLink,
     gymLocation,
     availableSlots,
-    token
   } = req.body;
   const image = req.file ? req.file.path : null;
 
@@ -54,7 +53,7 @@ router.post('/register', upload.single('image'), async (req, res) => {
     let parsedSlots = [];
     if (availableSlots) {
       try {
-        parsedSlots = JSON.parse(availableSlots); // ✅ Parse JSON string from frontend
+        parsedSlots = JSON.parse(availableSlots);
       } catch (err) {
         return res.status(400).json({ message: 'Invalid format for availableSlots', error: err });
       }
@@ -71,7 +70,8 @@ router.post('/register', upload.single('image'), async (req, res) => {
       onlineClassLink,
       gymLocation,
       availableSlots: parsedSlots, // ✅ Save slots array
-      image
+      image,
+      creator: req.user.id
     });
 
     await newTrainer.save();
@@ -85,8 +85,17 @@ router.post('/register', upload.single('image'), async (req, res) => {
 // Route to fetch male trainers
 router.get('/male', async (req, res) => {
   try {
-    const trainers = await Trainer.find({ gender: 'male' });
-    res.status(200).json(trainers);
+    let trainers = await Trainer.find({ gender: 'male', });
+    console.log('trainers', req.user.id, trainers);
+    
+    const trainersWithCreatorFlag = trainers.map(trainer => {
+      const trainerObj = trainer.toObject();
+      trainerObj.isCreator = trainer.creator && trainer.creator.toString() === req.user.id.toString();
+      
+      return trainerObj;
+    });
+    
+    res.status(200).json(trainersWithCreatorFlag);
   } catch (error) {
     res.status(400).json({ message: 'Error fetching male trainers', error });
   }
@@ -116,27 +125,31 @@ router.get('/my-trainer', authenticateToken, async (req, res) => {
   }
 });
 // ✅ Update trainer info
-router.put(
-  '/update-trainer/:id',
-  authenticateToken,
-  verifyTrainerOwner,
-  upload.single('image'), // ✅ support file uploads
+router.put('/update-trainer/:id',
+  upload.single('image'),
   async (req, res) => {
     try {
       const updateData = { ...req.body };
 
-      // ✅ Handle image upload
       if (req.file) {
         updateData.image = req.file.path;
       }
 
-      // ✅ Handle JSON strings
       if (updateData.specialization) {
         try {
-          updateData.specialization = JSON.parse(updateData.specialization);
+          const parsedSpec = JSON.parse(updateData.specialization);
+          
+          if (Array.isArray(parsedSpec)) {
+            updateData.specialization = parsedSpec.join(', ');
+          } else {
+            updateData.specialization = parsedSpec;
+          }
         } catch {
-          // fallback in case it's a plain string, not JSON
-          updateData.specialization = updateData.specialization.split(',').map(s => s.trim());
+          if (updateData.specialization.includes(',')) {
+            const specArray = updateData.specialization.split(',').map(s => s.trim());
+            updateData.specialization = specArray.join(', ');
+          }
+          // Otherwise, leave as is
         }
       }
 
@@ -165,9 +178,13 @@ router.put(
 
       const updatedTrainer = await Trainer.findByIdAndUpdate(
         req.params.id,
-        updateData,
+        { $set: updateData },
         { new: true }
       );
+
+      if (!updatedTrainer) {
+        return res.status(404).json({ message: 'Trainer not found' });
+      }
 
       res.status(200).json(updatedTrainer);
     } catch (error) {
@@ -178,7 +195,7 @@ router.put(
 
 
 // ✅ Delete trainer profile
-router.delete('/delete-trainer/:id', authenticateToken, verifyTrainerOwner, async (req, res) => {
+router.delete('/delete-trainer/:id', async (req, res) => {
   try {
     await Trainer.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: 'Trainer deleted successfully' });
