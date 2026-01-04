@@ -23,10 +23,13 @@ router.post('/forgot-password', async (req, res) => {
 
     const resetLink = `http://localhost:3000/reset-password/${token}`;
     await sendEmail(
+      
       user.recoveryEmail,  // Make sure recoveryEmail exists in schema
       'Reset Your Password',
       `Click here to reset your password: ${resetLink}\n\nThis link expires in 15 minutes.`
     );
+    console.log("Sending email to:", user.recoveryEmail);
+
 
     res.json({ message: 'Reset link sent to your recovery email' });
   } catch (error) {
@@ -146,7 +149,7 @@ router.post('/login', async (req, res) => {
 
     // Create the JWT payload
     const payload = {
-      id: user._id,
+      id: user._id.toString(),
       email: user.email,
       role : user.role,
     };

@@ -1,0 +1,225 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "hi",
+        "hello",
+        "hey",
+        "good morning",
+        "good evening",
+        "how are you",
+        "how are you doing",
+        "how's your day"
+      ],
+      "responses": [
+        "Hello! 👋 How can I help you today?",
+        "Hi there! 😊 What can I do for you?",
+        "I'm doing great! How can I assist you today?"
+      ]
+    },
+
+    {
+      "tag": "diet_general",
+      "patterns": [
+        "what is a healthy diet",
+        "can you suggest a diet plan",
+        "what is a balanced diet",
+        "healthy eating tips",
+        "diet for good health",
+        "natural diet plan",
+        "daily nutrition tips"
+      ],
+      "responses": [
+        "A healthy diet includes proteins, complex carbs, healthy fats, vegetables, fruits, and enough water."
+      ]
+    },
+
+    {
+      "tag": "weight_loss_diet",
+      "patterns": [
+        "diet plan for weight loss",
+        "diet for fat loss",
+        "foods to lose weight",
+        "diet for belly fat",
+        "low calorie diet",
+        "foods to avoid for weight loss",
+        "best diet to burn fat",
+        "how to lose weight fast"
+      ],
+      "responses": [
+        "For weight loss, focus on portion control, high protein foods, vegetables, whole grains, and regular exercise."
+      ]
+    },
+
+    {
+      "tag": "muscle_gain_diet",
+      "patterns": [
+        "diet plan for muscle gain",
+        "foods to build muscle",
+        "high protein foods",
+        "diet for gym",
+        "lean muscle diet",
+        "bulking diet plan",
+        "what should I eat to gain muscle"
+      ],
+      "responses": [
+        "To build muscle, eat high-protein foods like eggs, chicken, fish, legumes, along with complex carbs and healthy fats."
+      ]
+    },
+
+    {
+      "tag": "meal_timing",
+      "patterns": [
+        "what should I eat before workout",
+        "what should I eat after workout",
+        "pre workout meal",
+        "post workout meal",
+        "best snacks for gym",
+        "what to eat before gym",
+        "what to eat after gym"
+      ],
+      "responses": [
+        "Before workout, eat light carbs and protein. After workout, focus on protein and carbs to help muscle recovery."
+      ]
+    },
+
+    {
+      "tag": "special_diets",
+      "patterns": [
+        "vegetarian diet plan",
+        "vegan diet plan",
+        "keto diet plan",
+        "diet for diabetics",
+        "diet for heart health",
+        "pakistani diet plan",
+        "indian diet plan"
+      ],
+      "responses": [
+        "Special diets should be balanced and suited to your health needs. Let me know your goal for a better suggestion."
+      ]
+    },
+
+    {
+      "tag": "hydration",
+      "patterns": [
+        "how much water should I drink",
+        "importance of water",
+        "hydration tips",
+        "water intake for gym",
+        "how to stay hydrated"
+      ],
+      "responses": [
+        "Drink at least 2–3 liters of water daily. Increase intake if you work out or live in a hot climate."
+      ]
+    },
+
+    {
+      "tag": "workout_general",
+      "patterns": [
+        "can you give me a workout plan",
+        "gym workout routine",
+        "beginner workout",
+        "home workout",
+        "full body workout",
+        "daily workout routine"
+      ],
+      "responses": [
+        "A basic workout includes warm-up, strength training, cardio, and stretching."
+      ]
+    },
+
+    {
+      "tag": "weight_loss_workout",
+      "patterns": [
+        "workout plan for weight loss",
+        "best workout for fat burning",
+        "cardio workout",
+        "hiit workout",
+        "exercises to lose weight",
+        "belly fat exercises"
+      ],
+      "responses": [
+        "For fat loss, combine cardio like brisk walking or HIIT with strength training."
+      ]
+    },
+
+    {
+      "tag": "muscle_workout",
+      "patterns": [
+        "workout plan for muscle gain",
+        "chest workout",
+        "leg workout",
+        "back workout",
+        "shoulder workout",
+        "arm workout",
+        "abs workout"
+      ],
+      "responses": [
+        "Strength training with progressive overload is key for muscle growth."
+      ]
+    },
+
+    {
+      "tag": "gym_tips",
+      "patterns": [
+        "how many days should I workout",
+        "best time to workout",
+        "morning vs evening workout",
+        "how to stay consistent",
+        "gym motivation tips",
+        "rest day importance",
+        "how to avoid injuries"
+      ],
+      "responses": [
+        "Workout 3–5 days a week, rest properly, and stay consistent for best results."
+      ]
+    },
+
+    {
+      "tag": "fitness_games",
+      "patterns": [
+        "gym games",
+        "fitness games",
+        "fun workouts",
+        "skipping benefits",
+        "boxing workout",
+        "kickboxing fitness",
+        "sports for weight loss",
+        "basketball fitness",
+        "football stamina"
+      ],
+      "responses": [
+        "Fitness games like skipping, boxing, and sports are great for burning calories and staying motivated."
+      ]
+    },
+
+    {
+      "tag": "gym_equipment",
+      "patterns": [
+        "gym equipment for beginners",
+        "how to use treadmill",
+        "dumbbells vs barbells",
+        "smith machine",
+        "leg press machine",
+        "resistance bands",
+        "rowing machine",
+        "elliptical machine",
+        "kettlebell workout",
+        "home gym equipment"
+      ],
+      "responses": [
+        "Gym equipment helps target specific muscles. Beginners should start with machines and light weights."
+      ]
+    },
+
+    {
+      "tag": "fallback",
+      "patterns": [],
+      "responses": [
+        "Sorry, I didn’t understand that. Can you please rephrase?",
+        "I'm not sure I got that. Can you ask in a different way?"
+      ]
+    }
+  ]
+}

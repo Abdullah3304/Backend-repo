@@ -8,7 +8,12 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ['user', 'admin'], default: 'user' }, 
   recoveryEmail: { type: String, required: true },
   resetToken: { type: String },
-  resetTokenExpiry: { type: Date }
+  resetTokenExpiry: { type: Date },
+  membership: {
+  isActive: { type: Boolean, default: false },
+  boughtAt: { type: Date },
+  expiresAt: { type: Date }
+  }
 });
 
 const User = mongoose.model('User', userSchema);

@@ -1,41 +1,81 @@
-// Import required modules
-const orderRoutes = require('./routes/orderRoutes');
+// server.js - Complete Backend
+
+// ------------------------
+// 1. Imports & Setup
+// ------------------------
 const express = require('express');
 const dotenv = require('dotenv');
+// console.log("ENV CHECK:", process.env.SMTP_USER);
+
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const mongoose = require('mongoose');
-const connectDB = require('./config/db'); 
+const connectDB = require('./config/db');
+
+// Routes
+const orderRoutes = require('./routes/orderRoutes');
 const authRoutes = require('./routes/authRoutes');
-const productRoutes = require('./routes/productRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cartRoutes = require('./routes/cartRoutes');
-const adminRoutes = require('./routes/adminRoutes'); 
-const trainerRoutes = require('./routes/trainerRoutes');  // Import trainer routes
-const { authenticateToken } = require('./Middleware/authMiddleware'); 
+const adminRoutes = require('./routes/adminRoutes');
+const trainerRoutes = require('./routes/trainerRoutes');
 const threadRoutes = require('./routes/threadRoutes');
 const workoutRoutes = require('./routes/workoutRoutes');
-const app = express();
-require('dotenv').config();
+const fitnessProductRoutes = require('./routes/fitnessProductRoutes');
+const emailRoutes = require('./routes/emailRoutes');
+const { getBotResponse } = require("./Chatbot/chatbot");
 
-dotenv.config();
+
+// Middleware
+const { authenticateToken } = require('./Middleware/authMiddleware');
+
+dotenv.config(); // Load environment variables
+
+const app = express(); // Initialize Express App
 
 const corsOptions = {
   origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  credentials: true,
-  maxAge: 86400 // 24 hours
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 };
 
-// Apply CORS middleware
 app.use(cors(corsOptions));
 
-// Handle CORS preflight requests
-app.options('*', cors(corsOptions));
+// ------------------------
+// 2. Middleware
+// ------------------------
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// Chatbot Route
+// ------------------------
+console.log("✅ Chatbot route loaded");
 
-// Error handling for CORS
+app.post("/api/chatbot", (req, res) => {
+  const { message } = req.body;
+
+  if (!message) {
+    return res.status(400).json({ reply: "Message is required" });
+  }
+
+  const reply = getBotResponse(message);
+  res.json({ reply });
+});
+
+// // CORS configuration
+// const corsOptions = {
+//   origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+//   credentials: true,
+//   maxAge: 86400 // 24 hours
+// };
+
+// app.use(cors(corsOptions));
+// app.options('*', cors(corsOptions));
+
+// Optional: Error handling for CORS
 app.use((err, req, res, next) => {
   if (err.name === 'CORSError') {
     return res.status(403).json({
@@ -46,64 +86,80 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
+// ------------------------
+// 3. Routes
+// ------------------------
+
+// Email Route (Checkout Receipt)
+app.use('/api', emailRoutes); // POST /api/send-receipt
+
+// Orders
 app.use('/api/orders', orderRoutes);
-app.use(cors({
-  origin: 'http://localhost:3000', // your frontend origin
-  credentials: true
-}));
 
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: true })); 
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'uploads/');  
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + '-' + file.originalname);  
-    },
-  }),
-});
+// Auth & Users
+app.use('/api/auth', authRoutes);
+app.use('/api', cartRoutes);
+app.use('/api', userRoutes);
 
-
-
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/api/auth', authRoutes);  
-app.use('/api', cartRoutes);       
-app.use('/api', productRoutes);    
-app.use('/api', userRoutes);       
+// Admin
 app.use('/api/admin', adminRoutes);
 
+// Workouts & Community
 app.use('/api/workouts', workoutRoutes);
-
 app.use('/api/threads', threadRoutes);
 
-// New Trainer Routes
-app.use('/api/trainers', authenticateToken, trainerRoutes);  // Mount the trainer routes here
+// Trainers (Protected)
+app.use('/api/trainers', authenticateToken, trainerRoutes);
 
-app.post('/upload', upload.single('image'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).send('No file uploaded');
-  }
+// Fitness Products
+app.use('/api/fitness-products', fitnessProductRoutes);
 
-  console.log(req.body);  
-  console.log(req.file);  
-  mongoose.set('debug', true);
-
-  res.status(200).send('File uploaded successfully');
-});
-
+// Protected Test Route
 app.use('/api/protected', authenticateToken, (req, res) => {
   res.json({ message: 'This is a protected route', user: req.user });
 });
 
+// ------------------------
+// 4. File Upload Setup
+// ------------------------
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + '-' + file.originalname);
+    },
+  }),
+});
+
+app.post('/upload', upload.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).send('No file uploaded');
+
+  console.log(req.body);
+  console.log(req.file);
+
+  mongoose.set('debug', true); // optional debug
+
+  res.status(200).send('File uploaded successfully');
+});
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
+// 🔹 Test Route (for Insomnia)
+app.get('/test', (req, res) => {
+  res.json({
+    success: true,
+    message: 'API is working fine ✅'
+  });
+});
+// ------------------------
+// 5. Connect Database & Start Server
+// ------------------------
 connectDB();
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
-
-app.post('/api/orders', (req, res) => {
-  console.log('POST /api/orders hit');
-  res.json({ message: 'Order route works!' });
 });

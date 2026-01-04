@@ -2,14 +2,13 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const checkMembership = require('../Middleware/checkMembership');
 const Trainer = require('../models/Trainer');
 const { hireTrainer } = require('../controllers/hireTrainerController');
 const { authenticateToken } = require('../Middleware/authMiddleware');
-// const verifyTrainerOwner = require('../Middleware/verifyTrainerOwner');
 
 exports.hireTrainer = async (req, res) => {
   console.log('✅ hireTrainer route hit');
-  // rest of the code
 };
 // Configure multer for image upload
 const storage = multer.diskStorage({
@@ -26,7 +25,7 @@ const upload = multer({ storage });
 router.post('/hire', hireTrainer);
 
 // POST route to handle trainer registration
-router.post('/register', upload.single('image'), async (req, res) => {
+router.post('/register',authenticateToken, checkMembership, upload.single('image'), async (req, res) => {
   const {
     name,
     gender,
@@ -34,14 +33,14 @@ router.post('/register', upload.single('image'), async (req, res) => {
     price,
     availability,
     description,
-    gmail, // ✅ Extract gmail
+    gmail, 
     onlineClassLink,
     gymLocation,
     availableSlots,
   } = req.body;
   const image = req.file ? req.file.path : null;
 
-  // ✅ Validation based on availability
+  // Validation based on availability
   if (availability === 'online' && !onlineClassLink) {
     return res.status(400).json({ message: 'Online class link is required for online availability' });
   }
@@ -66,10 +65,10 @@ router.post('/register', upload.single('image'), async (req, res) => {
       price,
       availability,
       description,
-      gmail, // ✅ Save gmail
+      gmail, 
       onlineClassLink,
       gymLocation,
-      availableSlots: parsedSlots, // ✅ Save slots array
+      availableSlots: parsedSlots, // Save slots array
       image,
       creator: req.user.id
     });
@@ -104,8 +103,17 @@ router.get('/male', async (req, res) => {
 // Route to fetch female trainers
 router.get('/female', async (req, res) => {
   try {
-    const trainers = await Trainer.find({ gender: 'female' });
-    res.status(200).json(trainers);
+    let trainers = await Trainer.find({ gender: 'female', });
+    console.log('trainers', req.user.id, trainers);
+    
+    const trainersWithCreatorFlag = trainers.map(trainer => {
+      const trainerObj = trainer.toObject();
+      trainerObj.isCreator = trainer.creator && trainer.creator.toString() === req.user.id.toString();
+      
+      return trainerObj;
+    });
+    
+    res.status(200).json(trainersWithCreatorFlag);
   } catch (error) {
     res.status(400).json({ message: 'Error fetching female trainers', error });
   }
@@ -124,8 +132,8 @@ router.get('/my-trainer', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
-// ✅ Update trainer info
-router.put('/update-trainer/:id',
+// Update trainer info
+router.put('/update-trainer/:id', authenticateToken,
   upload.single('image'),
   async (req, res) => {
     try {
@@ -149,11 +157,10 @@ router.put('/update-trainer/:id',
             const specArray = updateData.specialization.split(',').map(s => s.trim());
             updateData.specialization = specArray.join(', ');
           }
-          // Otherwise, leave as is
         }
       }
 
-      // ✅ Validation based on updated availability
+      //  Validation based on updated availability
       if (updateData.availability === 'online') {
         if (!updateData.onlineClassLink) {
           return res.status(400).json({ message: 'Online class link is required for online availability' });
@@ -162,17 +169,17 @@ router.put('/update-trainer/:id',
       }
 
       if (updateData.availability === 'physical') {
-        if (!updateData.gymLocation) {
+        if (!updateData.onlineClassLink) {
           return res.status(400).json({ message: 'Gym location is required for physical availability' });
         }
-        updateData.onlineClassLink = undefined;
+        updateData.gymLocation = undefined;
       }
 
       if (updateData.availableSlots) {
         try {
           updateData.availableSlots = JSON.parse(updateData.availableSlots);
         } catch {
-          updateData.availableSlots = []; // fallback
+          updateData.availableSlots = []; 
         }
       }
 
@@ -194,7 +201,7 @@ router.put('/update-trainer/:id',
 );
 
 
-// ✅ Delete trainer profile
+// Delete trainer profile
 router.delete('/delete-trainer/:id', async (req, res) => {
   try {
     await Trainer.findByIdAndDelete(req.params.id);
@@ -203,7 +210,7 @@ router.delete('/delete-trainer/:id', async (req, res) => {
     res.status(500).json({ message: 'Error deleting trainer', error });
   }
 });
-// ✅ Get a specific trainer by ID
+// Get a specific trainer by ID
 router.get('/:id', async (req, res) => {
   try {
     const trainer = await Trainer.findById(req.params.id);

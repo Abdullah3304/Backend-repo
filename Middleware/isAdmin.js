@@ -20,7 +20,7 @@ const isAdmin = async (req, res, next) => {
 
     next(); 
   } catch (error) {
-    console.error('Error in isAdmin middleware:', error.message);
+    console.error('Error in isAdmin Middleware:', error.message);
     res.status(500).json({ error: 'Server error' });
   }
 };

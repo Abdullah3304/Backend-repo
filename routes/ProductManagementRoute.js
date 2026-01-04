@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
 const isAdmin = require('../Middleware/isAdmin');
-const authMiddleware = require('../middleware/auth'); // Assuming authMiddleware exists to authenticate users
+const authMiddleware = require('../Middleware/auth'); // Assuming authMiddleware exists to authenticate users
 
 // Add a new product
 router.post('/products', authMiddleware, isAdmin, async (req, res) => {

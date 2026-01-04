@@ -18,7 +18,7 @@ const TrainerSchema = new mongoose.Schema({
         type: String,
         required: function () { return this.availability === 'physical'; }
     },
-  //creator: {type: String, required: true },
+  creator: {type: String, required: true },
   
   // ✅ NEW FIELD for available slots
   availableSlots: [
