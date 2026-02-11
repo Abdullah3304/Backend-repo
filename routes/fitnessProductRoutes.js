@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const checkMembership = require('../Middleware/checkMembership');
+const checkMembership = require('../middleware/checkMembership');
 const FitnessProduct = require('../models/FitnessProducts'); // ✅ model is FitnessProduct
-const { authenticateToken } = require('../Middleware/authMiddleware');
+const { authenticateToken } = require('../middleware/authMiddleware');
 
 // Multer config for uploading images
 const storage = multer.diskStorage({

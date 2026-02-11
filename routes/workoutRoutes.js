@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const workoutController = require('../controllers/workoutController');
-const { authenticateToken } = require('../Middleware/authMiddleware');
+const { authenticateToken } = require('../middleware/authMiddleware');
 
 // Protect all workout routes with authentication
 router.use(authenticateToken);

@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const checkMembership = require('../Middleware/checkMembership');
+const checkMembership = require('../middleware/checkMembership');
 const Trainer = require('../models/Trainer');
 const { hireTrainer } = require('../controllers/hireTrainerController');
-const { authenticateToken } = require('../Middleware/authMiddleware');
+const { authenticateToken } = require('../middleware/authMiddleware');
 
 exports.hireTrainer = async (req, res) => {
   console.log('✅ hireTrainer route hit');

@@ -2,7 +2,7 @@ const Order = require('../models/order');
 const express = require('express');
 const router = express.Router();
 const { placeOrder, getUserOrders } = require('../controllers/orderController');
-const { authenticateToken } = require('../Middleware/authMiddleware'); 
+const { authenticateToken } = require('../middleware/authMiddleware'); 
 
 router.post('/',authenticateToken, placeOrder);
 router.get('/my-orders', authenticateToken, getUserOrders);

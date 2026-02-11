@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/User'); // ✅ Ensure this is added
 const { buyMembership } = require('../controllers/membershipController');
 const { registerUser, loginUser } = require('../controllers/userController'); // Ensure this is correctly imported
-const { authenticateToken } = require('../Middleware/authMiddleware');
+const { authenticateToken } = require('../middleware/authMiddleware');
 
 router.post('/buy-membership', authenticateToken, buyMembership);
 router.post('/register', registerUser);

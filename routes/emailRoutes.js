@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
-const { authenticateToken } = require('../Middleware/authMiddleware');
+const { authenticateToken } = require('../middleware/authMiddleware');
 
 // POST /api/send-receipt
 router.post('/send-receipt', authenticateToken, async (req, res) => {
