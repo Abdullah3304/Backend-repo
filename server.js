@@ -5,13 +5,12 @@
 // ------------------------
 const express = require('express');
 const dotenv = require('dotenv');
-// console.log("ENV CHECK:", process.env.SMTP_USER);
-
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const mongoose = require('mongoose');
 const connectDB = require('./config/db');
+const { getBotResponse } = require("./Chatbot/chatbot");
 
 // Routes
 const orderRoutes = require('./routes/orderRoutes');
@@ -24,12 +23,11 @@ const threadRoutes = require('./routes/threadRoutes');
 const workoutRoutes = require('./routes/workoutRoutes');
 const fitnessProductRoutes = require('./routes/fitnessProductRoutes');
 const emailRoutes = require('./routes/emailRoutes');
-const { getBotResponse } = require("./Chatbot/chatbot");
-
-
-// Middleware
 const { authenticateToken } = require('./Middleware/authMiddleware');
 
+// ------------------------
+// 2. Middleware
+// ------------------------
 dotenv.config(); // Load environment variables
 
 const app = express(); // Initialize Express App
@@ -43,15 +41,15 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// ------------------------
-// 2. Middleware
-// ------------------------
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// Chatbot Route
-// ------------------------
-console.log("✅ Chatbot route loaded");
 
+// ------------------------
+// 3. Routes
+// ------------------------
+
+// Chatbot Route
 app.post("/api/chatbot", (req, res) => {
   const { message } = req.body;
 
@@ -62,33 +60,6 @@ app.post("/api/chatbot", (req, res) => {
   const reply = getBotResponse(message);
   res.json({ reply });
 });
-
-// // CORS configuration
-// const corsOptions = {
-//   origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-//   credentials: true,
-//   maxAge: 86400 // 24 hours
-// };
-
-// app.use(cors(corsOptions));
-// app.options('*', cors(corsOptions));
-
-// Optional: Error handling for CORS
-app.use((err, req, res, next) => {
-  if (err.name === 'CORSError') {
-    return res.status(403).json({
-      error: 'CORS error',
-      message: 'Not allowed by CORS'
-    });
-  }
-  next(err);
-});
-
-// ------------------------
-// 3. Routes
-// ------------------------
 
 // Email Route (Checkout Receipt)
 app.use('/api', emailRoutes); // POST /api/send-receipt
@@ -125,7 +96,7 @@ app.use('/api/protected', authenticateToken, (req, res) => {
 const upload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'uploads/');
+      cb(null, 'uploads/'); // Save to uploads folder
     },
     filename: (req, file, cb) => {
       cb(null, Date.now() + '-' + file.originalname);
@@ -135,31 +106,29 @@ const upload = multer({
 
 app.post('/upload', upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).send('No file uploaded');
-
   console.log(req.body);
   console.log(req.file);
-
   mongoose.set('debug', true); // optional debug
-
   res.status(200).send('File uploaded successfully');
 });
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-
-// 🔹 Test Route (for Insomnia)
+// Test Route (for Insomnia or Postman)
 app.get('/test', (req, res) => {
   res.json({
     success: true,
     message: 'API is working fine ✅'
   });
 });
+
 // ------------------------
-// 5. Connect Database & Start Server
+// 5. Connect Database & Export for Vercel
 // ------------------------
 connectDB();
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// ------------------------
+// 6. Export for Vercel Deployment
+// ------------------------
+// This is important for Vercel to work with serverless functions
+module.exports = app; // Export the app for serverless use (Vercel will use it)
