@@ -23,7 +23,7 @@ const threadRoutes = require('./routes/threadRoutes');
 const workoutRoutes = require('./routes/workoutRoutes');
 const fitnessProductRoutes = require('./routes/fitnessProductRoutes');
 const emailRoutes = require('./routes/emailRoutes');
-const { authenticateToken } = require('./Middleware/authMiddleware');
+const { authenticateToken } = require('./middleware/authMiddleware');
 
 // ------------------------
 // 2. Middleware
