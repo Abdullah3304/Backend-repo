@@ -125,7 +125,10 @@ app.get('/test', (req, res) => {
 // ------------------------
 // 5. Connect Database & Export for Vercel
 // ------------------------
-connectDB();
+// Connect to database (cached for serverless)
+connectDB().catch(err => {
+  console.error('Failed to connect to MongoDB:', err);
+});
 
 // ------------------------
 // 6. Export for Vercel Deployment
