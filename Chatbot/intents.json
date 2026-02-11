@@ -1,225 +1,610 @@
 {
   "intents": [
+
     {
       "tag": "greeting",
-      "patterns": [
-        "hi",
-        "hello",
-        "hey",
-        "good morning",
-        "good evening",
-        "how are you",
-        "how are you doing",
-        "how's your day"
-      ],
+      "patterns": ["hi", "hello", "hey", "good morning", "good evening", "how are you"],
       "responses": [
-        "Hello! 👋 How can I help you today?",
-        "Hi there! 😊 What can I do for you?",
-        "I'm doing great! How can I assist you today?"
+        "Hello! 👋 Welcome to your fitness platform. How can I help you today?",
+        "Hi there! 😊 I can help you with diet plans, workouts, trainers, or products."
       ]
     },
 
+ 
     {
-      "tag": "diet_general",
-      "patterns": [
-        "what is a healthy diet",
-        "can you suggest a diet plan",
-        "what is a balanced diet",
-        "healthy eating tips",
-        "diet for good health",
-        "natural diet plan",
-        "daily nutrition tips"
-      ],
-      "responses": [
-        "A healthy diet includes proteins, complex carbs, healthy fats, vegetables, fruits, and enough water."
-      ]
-    },
-
-    {
-      "tag": "weight_loss_diet",
+      "tag": "weight_loss_diet_plan",
       "patterns": [
         "diet plan for weight loss",
-        "diet for fat loss",
-        "foods to lose weight",
-        "diet for belly fat",
-        "low calorie diet",
-        "foods to avoid for weight loss",
-        "best diet to burn fat",
-        "how to lose weight fast"
+        "how to lose weight",
+        "fat loss diet plan",
+        "diet to reduce belly fat",
+        "how to burn fat naturally"
       ],
       "responses": [
-        "For weight loss, focus on portion control, high protein foods, vegetables, whole grains, and regular exercise."
+        "Here’s a simple weight loss diet plan:\n\nBreakfast: Oats + boiled eggs + green tea\nLunch: Grilled chicken/fish + salad\nSnack: Fruits or nuts\nDinner: Light meal (vegetables + protein)\n\nAvoid sugar, fried food, and soft drinks. Stay consistent and drink 2-3 liters of water daily."
       ]
     },
 
     {
-      "tag": "muscle_gain_diet",
+      "tag": "low_calorie_foods",
+      "patterns": [
+        "low calorie foods",
+        "foods for calorie deficit",
+        "what to eat in calorie deficit"
+      ],
+      "responses": [
+        "Low-calorie foods include cucumber, spinach, broccoli, boiled eggs, grilled chicken, lentils, apples, and yogurt."
+      ]
+    },
+
+    {
+      "tag": "belly_fat_diet",
+      "patterns": [
+        "diet for belly fat",
+        "reduce stomach fat diet",
+        "flat stomach diet plan"
+      ],
+      "responses": [
+        "To reduce belly fat, avoid sugar and refined carbs. Eat high-protein foods, fiber-rich vegetables, and healthy fats like nuts and olive oil."
+      ]
+    },
+
+
+    {
+      "tag": "muscle_gain_diet_plan",
       "patterns": [
         "diet plan for muscle gain",
-        "foods to build muscle",
-        "high protein foods",
-        "diet for gym",
-        "lean muscle diet",
         "bulking diet plan",
-        "what should I eat to gain muscle"
+        "how to gain muscle",
+        "high protein diet"
       ],
       "responses": [
-        "To build muscle, eat high-protein foods like eggs, chicken, fish, legumes, along with complex carbs and healthy fats."
+        "Muscle gain diet example:\n\nBreakfast: Eggs + whole wheat bread + milk\nLunch: Rice + chicken/beef + vegetables\nSnack: Peanut butter sandwich\nDinner: Fish or lentils + salad\n\nEat in calorie surplus and consume 1.6–2.2g protein per kg body weight."
       ]
     },
 
     {
-      "tag": "meal_timing",
+      "tag": "high_protein_foods",
       "patterns": [
-        "what should I eat before workout",
-        "what should I eat after workout",
-        "pre workout meal",
-        "post workout meal",
-        "best snacks for gym",
-        "what to eat before gym",
-        "what to eat after gym"
+        "high protein foods",
+        "protein rich diet",
+        "best protein sources"
       ],
       "responses": [
-        "Before workout, eat light carbs and protein. After workout, focus on protein and carbs to help muscle recovery."
+        "High-protein foods include eggs, chicken breast, fish, beef, lentils, chickpeas, Greek yogurt, milk, and tofu."
       ]
     },
 
+
+
     {
-      "tag": "special_diets",
+      "tag": "vegetarian_diet",
       "patterns": [
         "vegetarian diet plan",
-        "vegan diet plan",
-        "keto diet plan",
-        "diet for diabetics",
-        "diet for heart health",
+        "veg diet for weight loss",
+        "vegetarian muscle gain diet"
+      ],
+      "responses": [
+        "Vegetarian diet plan:\nBreakfast: Oats + nuts\nLunch: Lentils (daal) + brown rice + salad\nSnack: Fruits\nDinner: Paneer/tofu + vegetables\n\nEnsure enough protein from lentils, beans, tofu, and dairy."
+      ]
+    },
+
+    {
+      "tag": "pakistani_diet_plan",
+      "patterns": [
         "pakistani diet plan",
+        "desi diet for weight loss",
         "indian diet plan"
       ],
       "responses": [
-        "Special diets should be balanced and suited to your health needs. Let me know your goal for a better suggestion."
+        "Desi weight loss diet:\nBreakfast: 1 boiled egg + 1 roti\nLunch: 1 roti + sabzi + daal\nSnack: Fruit\nDinner: Grilled chicken + salad\n\nAvoid naan, paratha, sweets, and fried food."
+      ]
+    },
+
+ 
+
+    {
+      "tag": "pre_workout_meal",
+      "patterns": [
+        "what to eat before workout",
+        "pre workout meal"
+      ],
+      "responses": [
+        "Before workout: Eat banana + peanut butter or oats 30–60 minutes before training."
       ]
     },
 
     {
-      "tag": "hydration",
+      "tag": "post_workout_meal",
       "patterns": [
-        "how much water should I drink",
-        "importance of water",
-        "hydration tips",
-        "water intake for gym",
-        "how to stay hydrated"
+        "what to eat after workout",
+        "post workout meal"
       ],
       "responses": [
-        "Drink at least 2–3 liters of water daily. Increase intake if you work out or live in a hot climate."
+        "After workout: Consume protein + carbs such as chicken with rice or protein shake with banana."
+      ]
+    },
+
+ 
+    {
+      "tag": "water_intake",
+      "patterns": [
+        "how much water should i drink",
+        "daily water intake",
+        "hydration tips"
+      ],
+      "responses": [
+        "Drink at least 2–3 liters of water daily. Increase intake if you exercise regularly."
+      ]
+    },
+
+    
+
+    {
+      "tag": "workout_plan",
+      "patterns": [
+        "beginner workout plan",
+        "home workout plan",
+        "gym routine"
+      ],
+      "responses": [
+        "Beginner workout:\nDay 1: Full body strength\nDay 2: Cardio\nDay 3: Rest\nRepeat 3–4 times weekly."
+      ]
+    },
+
+    
+    {
+      "tag": "hire_trainer",
+      "patterns": [
+        "how to hire trainer",
+        "hire personal trainer",
+        "trainer price"
+      ],
+      "responses": [
+        "You can hire a trainer from the Trainer section. Select a trainer, view details, and proceed with booking."
       ]
     },
 
     {
-      "tag": "workout_general",
+      "tag": "register_trainer",
       "patterns": [
-        "can you give me a workout plan",
-        "gym workout routine",
-        "beginner workout",
-        "home workout",
-        "full body workout",
-        "daily workout routine"
+        "how to become trainer",
+        "register as trainer"
       ],
       "responses": [
-        "A basic workout includes warm-up, strength training, cardio, and stretching."
+        "To register as a trainer, go to Register Trainer page. Active membership is required."
+      ]
+    },
+
+   
+
+    {
+      "tag": "buy_products",
+      "patterns": [
+        "how to buy products",
+        "fitness products",
+        "buy gym equipment"
+      ],
+      "responses": [
+        "Visit the Products page, add items to cart, and proceed to checkout."
       ]
     },
 
     {
-      "tag": "weight_loss_workout",
+      "tag": "sell_products",
       "patterns": [
-        "workout plan for weight loss",
-        "best workout for fat burning",
-        "cardio workout",
-        "hiit workout",
-        "exercises to lose weight",
-        "belly fat exercises"
+        "how to sell product",
+        "enlist fitness product"
       ],
       "responses": [
-        "For fat loss, combine cardio like brisk walking or HIIT with strength training."
+        "To sell products, you need an active membership. Go to Enlist Fitness Product page."
+      ]
+    },
+
+ 
+    {
+      "tag": "checkout_process",
+      "patterns": [
+        "how does checkout work",
+        "how to place order"
+      ],
+      "responses": [
+        "Add items to cart, go to Checkout, confirm details, and your order will be placed successfully."
       ]
     },
 
     {
-      "tag": "muscle_workout",
+      "tag": "view_orders",
       "patterns": [
-        "workout plan for muscle gain",
-        "chest workout",
-        "leg workout",
-        "back workout",
-        "shoulder workout",
-        "arm workout",
-        "abs workout"
+        "my orders",
+        "order history"
       ],
       "responses": [
-        "Strength training with progressive overload is key for muscle growth."
+        "You can view your order history from the My Orders page."
       ]
     },
 
+  
+
     {
-      "tag": "gym_tips",
+      "tag": "membership_info",
       "patterns": [
-        "how many days should I workout",
-        "best time to workout",
-        "morning vs evening workout",
-        "how to stay consistent",
-        "gym motivation tips",
-        "rest day importance",
-        "how to avoid injuries"
+        "what is membership",
+        "membership benefits",
+        "how to get membership"
       ],
       "responses": [
-        "Workout 3–5 days a week, rest properly, and stay consistent for best results."
+        "Membership allows you to register as trainer and sell fitness products on the platform."
       ]
     },
 
+    
     {
-      "tag": "fitness_games",
+      "tag": "community_help",
       "patterns": [
-        "gym games",
-        "fitness games",
-        "fun workouts",
-        "skipping benefits",
-        "boxing workout",
-        "kickboxing fitness",
-        "sports for weight loss",
-        "basketball fitness",
-        "football stamina"
+        "how to post in community",
+        "create thread"
       ],
       "responses": [
-        "Fitness games like skipping, boxing, and sports are great for burning calories and staying motivated."
+        "Go to Community page and create a new thread to share your fitness journey."
       ]
     },
 
+
+
     {
-      "tag": "gym_equipment",
+      "tag": "forgot_password",
       "patterns": [
-        "gym equipment for beginners",
-        "how to use treadmill",
-        "dumbbells vs barbells",
-        "smith machine",
-        "leg press machine",
-        "resistance bands",
-        "rowing machine",
-        "elliptical machine",
-        "kettlebell workout",
-        "home gym equipment"
+        "forgot password",
+        "reset password"
       ],
       "responses": [
-        "Gym equipment helps target specific muscles. Beginners should start with machines and light weights."
+        "Click on 'Forgot Password' on login page and follow the instructions."
       ]
     },
+
+  
 
     {
       "tag": "fallback",
       "patterns": [],
       "responses": [
-        "Sorry, I didn’t understand that. Can you please rephrase?",
-        "I'm not sure I got that. Can you ask in a different way?"
+        "Sorry, I didn’t understand that. Please ask about diet plans, workouts, trainers, products, or membership.",
+        "I can help with diet plans, workout routines, trainers, and fitness products. Please rephrase your question."
+      ]
+    },
+
+  
+  
+
+   
+
+    {
+      "tag": "create_account",
+      "patterns": ["how do i create an account", "sign up", "register account"],
+      "responses": [
+        "To create an account, go to the login page and click on Sign Up. Fill in your details and submit the form."
+      ]
+    },
+
+    {
+      "tag": "forgot_password",
+      "patterns": ["i forgot my password", "reset my password", "how can i reset password"],
+      "responses": [
+        "Click on 'Forgot Password' on the login page. Enter your registered email and follow the reset link sent to your inbox."
+      ]
+    },
+
+    {
+      "tag": "reset_email_issue",
+      "patterns": ["not receiving reset email", "password email not coming"],
+      "responses": [
+        "Please check your spam folder. If you still don’t receive the email, make sure you entered the correct registered email address."
+      ]
+    },
+
+    {
+      "tag": "login_issue",
+      "patterns": ["login not working", "invalid token error", "401 unauthorized"],
+      "responses": [
+        "Please ensure your email and password are correct. If the issue persists, try logging out and logging in again."
+      ]
+    },
+
+    {
+      "tag": "logout",
+      "patterns": ["how do i logout", "log out"],
+      "responses": [
+        "Click on the Logout button in the navigation bar to securely log out of your account."
+      ]
+    },
+
+    {
+      "tag": "membership_status",
+      "patterns": ["check membership status", "my membership"],
+      "responses": [
+        "You can check your membership status from your profile dashboard."
+      ]
+    },
+
+  
+    {
+      "tag": "beginner_workout",
+      "patterns": ["beginner workout plan"],
+      "responses": [
+        "Beginner workout plan: 3 days per week. Day 1: Full body strength. Day 2: Cardio. Day 3: Rest and stretching."
+      ]
+    },
+
+    {
+      "tag": "weight_loss_workout",
+      "patterns": ["workout for weight loss", "fat burning workout"],
+      "responses": [
+        "For weight loss, combine strength training with cardio like brisk walking, cycling, or HIIT 3–5 days per week."
+      ]
+    },
+
+    {
+      "tag": "muscle_gain_workout",
+      "patterns": ["workout for muscle gain"],
+      "responses": [
+        "For muscle gain, follow split training (chest, back, legs, shoulders) and focus on progressive overload."
+      ]
+    },
+
+    {
+      "tag": "hiit_info",
+      "patterns": ["what is hiit"],
+      "responses": [
+        "HIIT stands for High-Intensity Interval Training. It alternates short bursts of intense exercise with brief recovery periods."
+      ]
+    },
+
+    {
+      "tag": "progressive_overload",
+      "patterns": ["what is progressive overload"],
+      "responses": [
+        "Progressive overload means gradually increasing weight, reps, or intensity to stimulate muscle growth."
+      ]
+    },
+
+  
+
+    {
+      "tag": "balanced_diet",
+      "patterns": ["what is a balanced diet"],
+      "responses": [
+        "A balanced diet includes protein, complex carbs, healthy fats, vegetables, fruits, and adequate water intake."
+      ]
+    },
+
+    {
+      "tag": "weight_loss_diet",
+      "patterns": ["diet for weight loss", "fat loss diet"],
+      "responses": [
+        "Weight loss diet: High protein, low sugar, portion control. Example: Eggs + oats for breakfast, grilled chicken + salad for lunch, light dinner with vegetables."
+      ]
+    },
+
+    {
+      "tag": "muscle_gain_diet",
+      "patterns": ["diet for muscle gain"],
+      "responses": [
+        "Muscle gain diet: Eat in calorie surplus. Include eggs, chicken, rice, lentils, milk, nuts, and healthy fats."
+      ]
+    },
+
+    {
+      "tag": "pre_workout",
+      "patterns": ["what should i eat before workout"],
+      "responses": [
+        "Before workout: Banana with peanut butter or oats 30–60 minutes before training."
+      ]
+    },
+
+    {
+      "tag": "post_workout",
+      "patterns": ["what should i eat after workout"],
+      "responses": [
+        "After workout: Protein + carbs such as chicken with rice or a protein shake with fruit."
+      ]
+    },
+
+    {
+      "tag": "protein_need",
+      "patterns": ["how much protein do i need"],
+      "responses": [
+        "You need around 1.6–2.2 grams of protein per kg of body weight for muscle gain."
+      ]
+    },
+
+    {
+      "tag": "water_intake",
+      "patterns": ["how much water should i drink"],
+      "responses": [
+        "Drink at least 2–3 liters of water daily. Increase intake if you exercise regularly."
+      ]
+    },
+
+
+    {
+      "tag": "hire_trainer",
+      "patterns": ["how can i hire a trainer"],
+      "responses": [
+        "Go to the Trainer section, choose your preferred trainer, and proceed with booking."
+      ]
+    },
+
+    {
+      "tag": "register_trainer",
+      "patterns": ["register as trainer"],
+      "responses": [
+        "To register as a trainer, you need an active membership. Go to Register Trainer page."
+      ]
+    },
+
+    {
+      "tag": "trainer_receipt",
+      "patterns": ["trainer receipt"],
+      "responses": [
+        "You can view your trainer receipt after successful booking in your orders section."
+      ]
+    },
+
+
+    {
+      "tag": "buy_product",
+      "patterns": ["how do i buy fitness products"],
+      "responses": [
+        "Go to Products page, add items to cart, and proceed to checkout."
+      ]
+    },
+
+    {
+      "tag": "sell_product",
+      "patterns": ["how do i become a seller"],
+      "responses": [
+        "To become a seller, you need active membership. Then use Enlist Fitness Product page."
+      ]
+    },
+
+    {
+      "tag": "upload_image",
+      "patterns": ["how do i upload product images"],
+      "responses": [
+        "While listing a product, use the image upload option to upload your product images."
+      ]
+    },
+
+    
+
+    {
+      "tag": "checkout",
+      "patterns": ["how does checkout work"],
+      "responses": [
+        "Add items to cart, go to checkout, confirm details, and your order will be placed."
+      ]
+    },
+
+    {
+      "tag": "view_orders",
+      "patterns": ["where can i see my orders"],
+      "responses": [
+        "You can view all your orders from the My Orders page."
+      ]
+    },
+
+    {
+      "tag": "receipt",
+      "patterns": ["download receipt", "get invoice"],
+      "responses": [
+        "You can download your receipt from the orders section after successful purchase."
+      ]
+    },
+
+   
+
+    {
+      "tag": "create_post",
+      "patterns": ["how do i create a post"],
+      "responses": [
+        "Go to Community page and click on Create Thread to post your content."
+      ]
+    },
+
+    {
+      "tag": "edit_post",
+      "patterns": ["can i edit my post"],
+      "responses": [
+        "Yes, you can edit or delete your own posts from the community section."
+      ]
+    },
+
+    {
+      "tag": "watch_videos",
+      "patterns": ["where can i watch workout videos"],
+      "responses": [
+        "Visit the Video Tutorials section to watch workout videos."
+      ]
+    },
+
+   
+
+    {
+      "tag": "chatbot_help",
+      "patterns": ["what can you help me with"],
+      "responses": [
+        "I can help you with diet plans, workout routines, trainers, products, membership, and platform guidance."
+      ]
+    },
+
+ 
+
+    {
+      "tag": "data_security",
+      "patterns": ["is my data secure"],
+      "responses": [
+        "Yes, your data is securely stored and protected using authentication and secure database practices."
+      ]
+    },
+
+    
+
+    {
+      "tag": "admin_access",
+      "patterns": ["how do i access admin panel"],
+      "responses": [
+        "Only users with admin role can access the admin panel."
+      ]
+    },
+
+   
+    {
+      "tag": "membership_info",
+      "patterns": ["what is membership"],
+      "responses": [
+        "Membership allows you to register as a trainer and sell fitness products on the platform."
+      ]
+    },
+
+   
+    {
+      "tag": "refund_policy",
+      "patterns": ["what is refund policy"],
+      "responses": [
+        "Refund policy depends on product type. Please check product details or contact support."
+      ]
+    },
+
+   
+    {
+      "tag": "bmi_calculation",
+      "patterns": ["how do i calculate bmi"],
+      "responses": [
+        "BMI = weight (kg) / height (m²). A BMI between 18.5–24.9 is considered normal."
+      ]
+    },
+
+    {
+      "tag": "supplements",
+      "patterns": ["what supplements do you recommend"],
+      "responses": [
+        "Basic supplements include whey protein, creatine, and multivitamins. Consult a professional before use."
+      ]
+    },
+
+   
+
+    {
+      "tag": "fallback",
+      "patterns": [],
+      "responses": [
+        "Sorry, I didn’t understand that. Please ask about diet, workouts, trainers, products, or membership."
       ]
     }
+  
+
   ]
 }
+
+
