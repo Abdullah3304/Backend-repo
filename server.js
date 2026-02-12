@@ -33,7 +33,7 @@ dotenv.config(); // Load environment variables
 const app = express(); // Initialize Express App
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000' ,'https://frontend-repo-umber.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -123,12 +123,11 @@ app.get('/test', (req, res) => {
 });
 
 // ------------------------
-// 5. Connect Database & Export for Vercel
+// 5. Connect Database & Start Server
 // ------------------------
 connectDB();
 
-// ------------------------
-// 6. Export for Vercel Deployment
-// ------------------------
-// This is important for Vercel to work with serverless functions
-module.exports = app; // Export the app for serverless use (Vercel will use it)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
