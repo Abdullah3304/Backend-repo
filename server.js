@@ -57,15 +57,32 @@ app.use(express.urlencoded({ extended: true }));
 // ------------------------
 
 // Chatbot Route
-app.post("/api/chatbot", (req, res) => {
+app.post("/api/chatbot", authenticateToken, async (req, res) => {
   const { message } = req.body;
 
   if (!message) {
     return res.status(400).json({ reply: "Message is required" });
   }
 
-  const reply = getBotResponse(message);
-  res.json({ reply });
+  try {
+    console.log("=== Chatbot Request Debug ===");
+    console.log("Authorization Header:", req.headers.authorization);
+    console.log("User from token:", req.user);
+    console.log("Message:", message);
+    
+    const userId = req.user?.id || "anonymous";
+    const token = req.headers.authorization?.split(' ')[1]; // Extract token from Bearer header
+    const result = await getBotResponse(message, userId, token);
+    res.json({ 
+      reply: result.reply,
+      sessionId: result.sessionId
+    });
+  } catch (error) {
+    console.error("Chatbot error:", error);
+    res.status(500).json({ 
+      reply: "An error occurred while processing your message. Please try again." 
+    });
+  }
 });
 
 // Email Route (Checkout Receipt)

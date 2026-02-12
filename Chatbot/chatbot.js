@@ -1,47 +1,40 @@
-const fs = require("fs");
-const path = require("path");
+const axios = require("axios");
 
-const intentsPath = path.join(__dirname, "intents.json");
-const data = JSON.parse(fs.readFileSync(intentsPath, "utf-8"));
+const PYTHON_API_URL = process.env.PYTHON_API_URL || "http://localhost:8000";
 
-function similarity(a, b) {
-  const setA = new Set(a);
-  const setB = new Set(b);
-
-  const intersection = new Set([...setA].filter(x => setB.has(x)));
-  return intersection.size / (setA.size + setB.size - intersection.size);
-}
-
-function tokenize(text) {
-  return text.toLowerCase().split(/\s+/);
-}
-
-function getBotResponse(userInput) {
-  const inputTokens = tokenize(userInput);
-
-  let bestIntent = null;
-  let bestScore = 0;
-
-  data.intents.forEach(intent => {
-    intent.patterns.forEach(pattern => {
-      const score = similarity(
-        inputTokens,
-        tokenize(pattern)
-      );
-
-      if (score > bestScore) {
-        bestScore = score;
-        bestIntent = intent;
+/**
+ * Send a message to the Python chatbot API and get a response
+ * @param {string} message - The user's message
+ * @param {string} userId - The user's ID for session management
+ * @param {string} token - The authorization token to forward to Python API
+ * @returns {Promise<Object>} - Returns { sessionId, response }
+ */
+async function getBotResponse(message, userId, token) {
+  try {
+    const response = await axios.post(`${PYTHON_API_URL}/chat`, {
+      message: message,
+      user_id: userId
+    }, {
+      timeout: 30000, // 30 second timeout
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       }
     });
-  });
 
-  if (!bestIntent || bestScore < 0.2) {
-    bestIntent = data.intents.find(i => i.tag === "fallback");
+    return {
+      sessionId: response.data.session_id,
+      reply: response.data.response
+    };
+  } catch (error) {
+    console.error("Error calling Python chatbot API:", error.message);
+    
+    // Fallback response if API is unavailable
+    return {
+      sessionId: null,
+      reply: "I apologize, but I'm having trouble processing your request right now. Please try again later."
+    };
   }
-
-  const responses = bestIntent.responses;
-  return responses[Math.floor(Math.random() * responses.length)];
 }
 
 module.exports = { getBotResponse };
