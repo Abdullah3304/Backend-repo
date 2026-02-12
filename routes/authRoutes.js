@@ -21,15 +21,19 @@ router.post('/forgot-password', async (req, res) => {
     user.resetTokenExpiry = Date.now() + 1000 * 60 * 15; // 15 mins
     await user.save();
 
-    const resetLink = `http://localhost:3000/reset-password/${token}`;
+    // Dynamically get the frontend URL based on the environment (production or development)
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';  // Default to localhost for local development
+
+    // Generate the reset link based on the environment
+    const resetLink = `${frontendUrl}/reset-password/${token}`;
+
+    // Send the email with the reset link
     await sendEmail(
-      
       user.recoveryEmail,  // Make sure recoveryEmail exists in schema
       'Reset Your Password',
       `Click here to reset your password: ${resetLink}\n\nThis link expires in 15 minutes.`
     );
     console.log("Sending email to:", user.recoveryEmail);
-
 
     res.json({ message: 'Reset link sent to your recovery email' });
   } catch (error) {
@@ -47,7 +51,6 @@ router.post('/reset-password', async (req, res) => {
       resetToken: token,
       resetTokenExpiry: { $gt: Date.now() }
     });
-    console.log("<<<<<<<<<<<<<", token)
 
     if (!user) return res.status(400).json({ error: 'Invalid or expired token' });
 
@@ -64,18 +67,15 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
-
+// ✅ Register User
 router.post('/register', async (req, res) => {
   const { email, password, role, recoveryEmail } = req.body;
-
-  console.log("<<<<<register>>>>>>>>")
 
   if (!email || !password) {
     return res.status(400).json({ error: 'Please provide both email and password' });
   }
+
   try {
-  
-  
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
@@ -103,9 +103,9 @@ router.post('/register', async (req, res) => {
   }
 });
 
-
+// ✅ Clear Cart
 router.post('/clear-cart', async (req, res) => {
-  const { userId } = req.body; 
+  const { userId } = req.body;
 
   try {
     const userCart = await Cart.findOne({ user: userId });
@@ -126,7 +126,7 @@ router.post('/clear-cart', async (req, res) => {
   }
 });
 
-
+// ✅ User Login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -151,10 +151,10 @@ router.post('/login', async (req, res) => {
     const payload = {
       id: user._id.toString(),
       email: user.email,
-      role : user.role,
+      role: user.role,
     };
 
-    // Sign the JWT token (expires in 1 hour)
+    // Sign the JWT token (expires in 1 day)
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
 
     // Respond with the JWT token
@@ -166,10 +166,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Test Route (for debugging or API testing)
 router.get('/test', (req, res) => {
   res.send('Auth Route Working');
 });
-
-
 
 module.exports = router;
