@@ -32,8 +32,15 @@ dotenv.config(); // Load environment variables
 
 const app = express(); // Initialize Express App
 
+// CORS configuration - Allow frontend access
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  process.env.FRONTEND_URL // Add your frontend Vercel URL
+].filter(Boolean); // Remove undefined values
+
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000' ,'https://frontend-repo-umber.vercel.app'],
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -125,7 +132,10 @@ app.get('/test', (req, res) => {
 // ------------------------
 // 5. Connect Database & Start Server
 // ------------------------
-connectDB();
+// Connect to database (cached for serverless)
+connectDB().catch(err => {
+  console.error('Failed to connect to MongoDB:', err);
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
